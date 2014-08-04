@@ -1,3 +1,5 @@
+THIS IS A TEST OF GIT
+
 # purpose of this script: calculations related to "future of civilization analysis"
 # last modified: by Dwayne June 19, 2014
 
