@@ -1,15 +1,15 @@
-THIS IS A TEST OF GIT
+# This code converts units, does calculations, and creates graphics for
+# the book Human Enterprise, Ecosystems, and the Future of Civilization.
 
-# purpose of this script: calculations related to "future of civilization analysis"
-# last modified: by Dwayne June 19, 2014
-
+###################################################################################
+# load libraries
 library(ggplot2)
 
 ###################################################################################
-# CALC 1
+# The code below does calculations, conversions, and creates
+# Figure 2 in the book.
+
 # Purpose: Estimate kg of C in oil reserves
-# Note: Assumptions taken from random internet sources and need to be checked/cited
-###################################################################################
 
 # constants and assumptions
 number_barrels_oil = 1668.9 * 1e3 * 1e6 # 1,668/9 thousand million barrels" of oil
@@ -29,12 +29,7 @@ C_kg_oil <- # kg of carbon
 
 C_kg_oil # print result, C in one barrel of oil, kg
 
-
-###################################################################################
-# CALC 2
 # Purpose: Estimate kg of C in coal reserves
-# Note: Assumptions taken from random internet sources and need to be checked/cited
-###################################################################################
 
 # constants and assumptions
 coal_reserves_tonnes <- 860938e6 #860,938 million tonnes
@@ -44,7 +39,7 @@ MW_O <- 15.9994 # molecular weight of oxygen
 MW_N <- 14.0067 # molecular weigth of nitrogen
 MW_S <- 32.065 # molecular weight of sulfur
 # Note a random internet sources gives a typical chemical formula for coal
-  # as C135 H96 O9 N1 S1
+# as C135 H96 O9 N1 S1
 
 # calculation
 C_kg_coal <- # estimated kg C in coal reserves
@@ -54,12 +49,7 @@ C_kg_coal <- # estimated kg C in coal reserves
 
 C_kg_coal # print estimate of kg C in coal reserves
 
-
-###################################################################################
-# CALC 3
 # Purpose: Estimate kg of C in natural gas reserves
-# Note: Assumptions taken from random internet sources and need to be checked/cited
-###################################################################################
 
 # constants and assumptions
 nat_gas_reserves_m3 <- 187.3e12 # 187.3 trillion cubic meters natural gas
@@ -76,11 +66,7 @@ C_kg_nat_gas <- # estimated kg C in natural gas reserves
 
 C_kg_nat_gas # print estimate of kg C in natural gas reserves
 
-
-###################################################################################
-# CALC 4
 # Purpose: Convert estimate of total carbon stock in forests to kg C
-###################################################################################
 
 # constants and assumptions
 C_forest_tonnes <- 652371e6 # 652,371 million tons of carbon
@@ -92,23 +78,15 @@ C_forest_kg <- # estimate of total C in forests, including dead wood and soil, k
 
 C_forest_kg # print estimate of kg C in forests
 
-
-###################################################################################
-# CALC 5
 # Purpose: Sum the estimates of carbon in fossil fuel reserves and forests
-###################################################################################
 
 # calculation
 natural_capital_kgC <- C_kg_oil + C_kg_coal + C_kg_nat_gas + C_forest_kg
 
 natural_capital_kgC # print the estimate of total natural capital, kg C
 
-
-###################################################################################
-# CALC 6
 # Purpose: Convert estimate of primary productivity from Pg/yr to kg/yr
 # and make a graph
-###################################################################################
 
 # constants and assumptions
 NPP_Pgyr <- 53.6 # Pg C/yr according to Running
@@ -138,8 +116,8 @@ natural_capital_df$category <- factor(natural_capital_df$category,
                                         "Fossil Fuels (kg C)", 
                                         "Forests (kg C)",
                                         "NPP (kg C/yr)"
-                                                )
                                       )
+)
 
 # now, make the graph
 C_stacked_bar_1 <- ggplot(
@@ -155,12 +133,12 @@ C_stacked_bar_1 <- ggplot(
   ylab("Carbon Content") + # change y label
   theme_bw() +  # plain black and white theme
   scale_fill_discrete(name ="",            # control order of legend
-                         breaks=c("Coal", 
-                                  "Oil", 
-                                  "Natural Gas", 
-                                  "Forests", 
-                                  "NPP")
-                         ) +
+                      breaks=c("Coal", 
+                               "Oil", 
+                               "Natural Gas", 
+                               "Forests", 
+                               "NPP")
+  ) +
   scale_y_continuous(limits=c(0,1.2e15),   # control the y axis
                      breaks=(seq(0,1.2e15,0.2e15)))
 
@@ -180,26 +158,137 @@ C_stacked_bar <- C_stacked_bar_1 +
 C_stacked_bar
 
 ###################################################################################
-# CALC 7
-# Purpose: Convert feedback relationship from 10% / 1000 Gt to fraction/kg
-###################################################################################
-
-# constants and assumptions
-reduction_per1000Gt <- 0.165 # ~16.5% per 1000 Gt C
-
-# calculation
-reduction_perkg <- # dimensionless reduction in activity per kg C gap
-  reduction_per1000Gt * # fraction / 1000 Gt
-  1 / 1000e9 * # 1000 Gt / 1000e9 tonnes
-  1 / 1000 # 1 tonne / 1000 kg
-
-reduction_perkg # print result
-
 
 ###################################################################################
-# CALC 8
+# The code below does calculations, conversions, and creates
+# Figure 4 in the book. Note that this requires an external data set.
+
+# Purpose: read in and plot data on oil production 
+# note this reads an external data set - user needs to set the local path
+oil_production_tbd <- read.table(  # oil production, thousand barrels per dat
+  'E:\\Book\\Graphics\\Github\\human-enterprise-book\\Oil_Data_BP_Production_28Nov2013.csv',
+  sep = ",",
+  col.names = c("Year","Production_tbd"),
+  skip = 2
+)
+
+head(oil_production_tbd, 5)
+
+# PLOT OIL PRODUCTION DATA
+
+# initiate plot
+oil_production_plot1 <- ggplot(
+  data = oil_production_tbd,
+  aes(x=Year, y=Production_tbd)
+)
+
+# add bars
+oil_production_plot2 <- oil_production_plot1 + 
+  geom_bar(
+    stat="identity",
+    fill = "blue" # make the bars blue
+  )
+oil_production_plot2
+
+oil_production_plot2b <- oil_production_plot2 + theme_bw()
+oil_production_plot2b
+
+# set axis labels and fonts
+oil_production_plot3 <- oil_production_plot2 +
+  theme(
+    axis.title.x = element_text(size = 17),
+    axis.title.y = element_text(size = 17),
+    axis.text.x = element_text(size = 15, color = "black"), # set font size and color of x axis text
+    axis.text.y = element_text(size = 15, color = "black"), # set font size and color of y axis text
+    panel.background =  element_rect(fill = "white", colour = NA), # set white background
+    panel.border =      element_rect(fill = NA, colour="black"), # set black border
+    panel.grid.major =  element_line(colour = "grey90", size = 0.2), # set major grid lines
+    panel.grid.minor =  element_line(colour = "grey98", size = 0.5) # set minor grid lines
+  )
+
+oil_production_plot3
+
+oil_production_plot3b <- oil_production_plot3 + 
+  labs(x="Year", y = "Production (thousand barrels per day)")
+
+oil_production_plot3b
+
+# set axis limits and intervals
+oil_production_plot4 <- oil_production_plot3b +
+  scale_x_continuous(limits=c(1986,2013), breaks=seq(1986,2013,2)) +
+  scale_y_continuous(limits=c(0,100000), breaks=(seq(0,100000,10000)))
+oil_production_plot4
+
+###################################################################################
+
+###################################################################################
+# The code below does calculations, conversions, and creates
+# Figure 5 in the book.
+
+# Purpose: read in and plot data on oil prices
+# requires an external data set, available on Github
+
+oil_price <- read.table(  # Brent crude price
+  'E:\\Book\\Graphics\\Github\\human-enterprise-book\\Oil_Data_USEAI_Price_28Nov2013.csv',
+  sep = ",",
+  col.names = c("Date1","Price_USD", "Price_2012_USD", "Year", "Price_Mult"),
+  skip = 3
+)
+
+oil_price$Date1 <- as.Date(oil_price$Date1, "%m/%d/%Y")
+
+head(oil_price,n=10)
+
+# PLOT OIL PRICE DATA
+# initiate the plot
+oil_price_plot1 <- ggplot(
+  data = oil_price,
+  aes(x=factor(Year), y=Price_2012_USD)
+)
+
+# create box plots where whiskers extend all the way to max and min
+oil_price_plot2 <- oil_price_plot1 + geom_boxplot(coef=Inf, color="blue")
+
+# change axis label size and make bold
+oil_price_plot3 <- oil_price_plot2 +
+  theme(
+    axis.title.x = element_text(size = 17),
+    axis.title.y = element_text(size = 17),
+    axis.text.x = element_text(size = 15, color = "black"), # set font size and color of x axis text
+    axis.text.y = element_text(size = 15, color = "black"), # set font size and color of y axis text
+    panel.background =  element_rect(fill = "white", colour = NA), # set white background
+    panel.border =      element_rect(fill = NA, colour="black"), # set black border
+    panel.grid.major =  element_line(colour = "grey90", size = 0.2), # set major grid lines
+    panel.grid.minor =  element_line(colour = "grey98", size = 0.5) # set minor grid lines
+  ) + 
+  labs(x="Year", y = "Price (Constant 2012 USD)")
+
+# change y (continuous) axis limits and intervals
+oil_price_plot4 <- oil_price_plot3 +
+  scale_y_continuous(
+    limits=c(0,160), 
+    breaks=seq(0,160,20)
+  )
+
+# change x (discrete) axis limits and intervals
+oil_price_plot5 <- oil_price_plot4 +
+  scale_x_discrete(
+    breaks=seq(1985, 2015, 5)
+  )
+
+# print the plot
+oil_price_plot5
+
+###################################################################################
+
+###################################################################################
+# The code below does calculations, conversions, and creates
+# Figure 10 in the book.
+
 # Purpose: Convert GJ per tonne oil equivalent to J/kg oil equivalent
-###################################################################################
+
+
+# Purpose: fit a trend line to energy supply data from Keay (2007)
 
 # constants and assumptions
 GJ_per_tonne_oe <- 42 # GJ per tonne oil equivalent
@@ -220,18 +309,12 @@ kg_C_per_J <- kg_C_per_kgoe / J_per_kg
 
 kg_C_per_J # print result
 
-
-###################################################################################
-# CALC 9
-# Purpose: fit a trend line to energy supply data from Keay (2007)
-###################################################################################
-
 # create a data frame from Table 3, p. 11
 
 energy_supply_data <- data.frame(
   year = c(1820, 1870, 1913, 1950, 1973, 2003),
   energy_supply_MToe = c(221, 388, 1093, 2130, 6043, 10723)
-  )
+)
 
 # convert to J
 
@@ -260,7 +343,7 @@ energy_supply_data # print the data frame
 # lognormal curve fit
 
 energy_supply_predicted_W <- glm(energy_supply_W~year, 
-  data=energy_supply_data, family=gaussian(link="log"))
+                                 data=energy_supply_data, family=gaussian(link="log"))
 
 energy_supply_predicted_W  # print the regression results
 
@@ -316,7 +399,7 @@ Energy_Supply_Plot_5 <- Energy_Supply_Plot_4 +
     name = "Year", # x axis label
     limits = c(1820, 2020), # set x axis limits
     breaks = seq(1820, 2020, 20), # x axis limits and interval
-#     minor_breaks = function(x) log10(x)/10, # specify minor breaks (NOT DEBUGGED)
+    #     minor_breaks = function(x) log10(x)/10, # specify minor breaks (NOT DEBUGGED)
     expand = c(0.01,0) # control where y axis crosses - first number is fraction of plot left as white space
     #     labels = c("Years", "", "Decades", "", "Centuries", "") # replace x-axis numbers with text labels
   ) +
@@ -335,7 +418,7 @@ Energy_Supply_Plot_6 <- Energy_Supply_Plot_5 +
     axis.text.x = element_text(size = 15), # set font size of x axis text
     axis.title.y = element_text(size = 18), # set font size of y axis label
     axis.text.y = element_text(size = 15), # set font size of y axis text
-    panel.grid.minor = element_line() # specify minor grid lines (NOT DEBUGGED)
+    panel.grid.minor = element_line() # specify minor grid lines
   )
 
 Energy_Supply_Plot_6
@@ -347,15 +430,22 @@ energy_use_2013 <- exp(-19.27185 + 0.02475*2013)
 
 energy_use_2013 # print result
 
+###################################################################################
+# Purpose: Convert feedback relationship from 10% / 1000 Gt to fraction/kg
+
+# constants and assumptions
+reduction_per1000Gt <- 0.165 # ~16.5% per 1000 Gt C
+
+# calculation
+reduction_perkg <- # dimensionless reduction in activity per kg C gap
+  reduction_per1000Gt * # fraction / 1000 Gt
+  1 / 1000e9 * # 1000 Gt / 1000e9 tonnes
+  1 / 1000 # 1 tonne / 1000 kg
+
+reduction_perkg # print result
 
 ###################################################################################
-# CALC 10
-# Purpose: checks and calcs for revised natural capital depletion estimate
-###################################################################################
-
-# check earlier energy supply calc against energy consumption data from BP
-# earlier estimate of 2013 energy supply = 5.84e20 J
-# BP consumption data = 12,476.6 million tonnes oil equivalent
+# Purpose: estimate natural capital depletion per unit of energy used
 
 energy_consumption_2012_J <- # 2012 energy consumption in J
   12476.6 * # million tonnes oil equivalent
@@ -391,11 +481,8 @@ new_estimate_nat_cap_depl_kgCperJperyr <- # 5.5079e-8
   new_estimate_natural_capital_depletion_kgCperyr /
   energy_consumption_2012_J
 
-
 ###################################################################################
-# CALC 11
 # Purpose: data from Costanza, 1997 and IMF, 1999
-###################################################################################
 
 Costanza_data <- data.frame(
   service =           c("Gas_regulation",
@@ -437,80 +524,8 @@ Costanza_data <- data.frame(
   category = c(rep("ecosystem_service", 17), "GDP")
 )
 
-# make a pie chart of this data
-
-pie(
-  x=Costanza_data$value_1997USDe9,
-  labels=Costanza_data$ecosystem_service,
-  radius=0.5
-  )
-
-# try a "Cleveland dot plot"
-
-dotchart(
-  x=Costanza_data$value_1997USDe9,
-  labels=Costanza_data$ecosystem_service,
-  )
-
-# try a horizontal bar plot
-
-barplot(
-  height=Costanza_data$value_1997USDe9,
-  names.arg=Costanza_data$ecosystem_service,
-  horiz=TRUE,
-  )
-
-# CREATE BAR CHARTS IN GGPLOT2
-
-# remove GDP row to create plot with no GDP
-Costanza_data_noGDP <- Costanza_data[-18,]
-
-# initiate plot, first without stacking
-# note: for no stacking, x=service, no fill
-# for stacking, x=category, fill=service
-Costanza_stacked_bar1 <- ggplot(
-  data=Costanza_data_noGDP, 
-  aes(
-    x=service, 
-    y=value_1997USDe9#,
-    )
-  )
-
-# tell it what values to plot and flip to horizontal
-Costanza_stacked_bar2 <- Costanza_stacked_bar1 + 
-  geom_bar(
-    stat="identity"
-    ) +
-  coord_flip() +
-  theme_bw()
-
-# print grapch
-Costanza_stacked_bar2
-
-# now compare ecosystem services to GDP
-
-Costanza_stacked_bar3 <- ggplot(
-  data=Costanza_data, 
-  aes(
-    x=category, 
-    y=value_1997USDe9
-  )
-)
-
-# tell it what values to plot and flip to horizontal
-Costanza_stacked_bar4 <- Costanza_stacked_bar3 + 
-  geom_bar(
-    stat="identity") +
-  coord_flip() +
-  theme_bw()
-
-# print graph
-Costanza_stacked_bar4
-
 ###################################################################################
-# CALC 12
-# Purpose: data on probability of disaster
-###################################################################################
+# Purpose: data and wild assumptions on probability of disaster
 
 # this is the database of war, plague, and disaster probabilities
 #   event (character string): name of the event
@@ -544,127 +559,8 @@ disaster_database <- data.frame(
   reference = c("Rees, Loc 406", "Rees, Loc 1264", "Rees, Loc 1709")
   )
 
-
 ###################################################################################
-# CALC 13
-# Purpose: read in and plot data on oil production
-###################################################################################
-
-oil_production_tbd <- read.table(  # oil production, thousand barrels per dat
-  'c:\\Users\\Dwayne\\Documents\\2013\\Oil_Data_BP_Production_28Nov2013.csv',
-  sep = ",",
-  col.names = c("Year","Production_tbd"),
-  skip = 2
-  )
-
-head(oil_production_tbd, 5)
-
-# PLOT OIL PRODUCTION DATA
-
-# initiate plot
-oil_production_plot1 <- ggplot(
-  data = oil_production_tbd,
-  aes(x=Year, y=Production_tbd)
-)
-
-# add bars
-oil_production_plot2 <- oil_production_plot1 + 
-  geom_bar(
-    stat="identity",
-    fill = "blue" # make the bars blue
-  )
-oil_production_plot2
-
-oil_production_plot2b <- oil_production_plot2 + theme_bw()
-oil_production_plot2b
-
-# set axis labels and fonts
-oil_production_plot3 <- oil_production_plot2 +
-  theme(
-    axis.title.x = element_text(size = 17),
-    axis.title.y = element_text(size = 17),
-    axis.text.x = element_text(size = 15, color = "black"), # set font size and color of x axis text
-    axis.text.y = element_text(size = 15, color = "black"), # set font size and color of y axis text
-    panel.background =  element_rect(fill = "white", colour = NA), # set white background
-    panel.border =      element_rect(fill = NA, colour="black"), # set black border
-    panel.grid.major =  element_line(colour = "grey90", size = 0.2), # set major grid lines
-    panel.grid.minor =  element_line(colour = "grey98", size = 0.5) # set minor grid lines
-)
-
-oil_production_plot3
-        
-oil_production_plot3b <- oil_production_plot3 + 
-  labs(x="Year", y = "Production (thousand barrels per day)")
-
-oil_production_plot3b
-
-# set axis limits and intervals
-oil_production_plot4 <- oil_production_plot3b +
-  scale_x_continuous(limits=c(1986,2013), breaks=seq(1986,2013,2)) +
-  scale_y_continuous(limits=c(0,100000), breaks=(seq(0,100000,10000)))
-oil_production_plot4
-
-###################################################################################
-# CALC 13
-# Purpose: read in and plot data on oil prices
-###################################################################################
-
-oil_price <- read.table(  # Brent crude price
-  'c:\\Users\\Dwayne\\Documents\\2013\\Oil_Data_USEAI_Price_28Nov2013.csv',
-  sep = ",",
-  col.names = c("Date1","Price_USD", "Price_2012_USD", "Year", "Price_Mult"),
-  skip = 3
-  )
-
-oil_price$Date1 <- as.Date(oil_price$Date1, "%m/%d/%Y")
-
-head(oil_price,n=10)
-
-# PLOT OIL PRICE DATA
-# initiate the plot
-oil_price_plot1 <- ggplot(
-  data = oil_price,
-  aes(x=factor(Year), y=Price_2012_USD)
-)
-
-# create box plots where whiskers extend all the way to max and min
-oil_price_plot2 <- oil_price_plot1 + geom_boxplot(coef=Inf, color="blue")
-
-# change axis label size and make bold
-oil_price_plot3 <- oil_price_plot2 +
-  theme(
-    axis.title.x = element_text(size = 17),
-    axis.title.y = element_text(size = 17),
-    axis.text.x = element_text(size = 15, color = "black"), # set font size and color of x axis text
-    axis.text.y = element_text(size = 15, color = "black"), # set font size and color of y axis text
-    panel.background =  element_rect(fill = "white", colour = NA), # set white background
-    panel.border =      element_rect(fill = NA, colour="black"), # set black border
-    panel.grid.major =  element_line(colour = "grey90", size = 0.2), # set major grid lines
-    panel.grid.minor =  element_line(colour = "grey98", size = 0.5) # set minor grid lines
-  ) + 
-  labs(x="Year", y = "Price (Constant 2012 USD)")
-
-# change y (continuous) axis limits and intervals
-oil_price_plot4 <- oil_price_plot3 +
-  scale_y_continuous(
-    limits=c(0,160), 
-    breaks=seq(0,160,20)
-  )
-
-# change x (discrete) axis limits and intervals
-oil_price_plot5 <- oil_price_plot4 +
-  scale_x_discrete(
-    breaks=seq(1985, 2015, 5)
-    )
-
-# print the plot
-oil_price_plot5
-
-
-###################################################################################
-# CALC 14
 # Purpose: convert erg/s to W
-###################################################################################
 
 Kardashev_I_W <- 4e19 * # erg/s
     1e-7 # W / erg/s
