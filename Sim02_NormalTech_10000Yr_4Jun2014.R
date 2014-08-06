@@ -1,6 +1,7 @@
-# Simulation: Sim02_NormalTech_4Jun2014
-# Description: green tech progress faster than overall growth
-# last modified: by Dwayne June 4, 2014
+# Purpose: This script performs the simulation and produces the results
+# shown in Figure 19 in the book Human Enterprise, Ecosystems, 
+# and the Future of Civilization. In this simulation, there is "typical" 
+# progress in "green technology". The simulation runs for 10,000 years.
 
 ###################################################################################
 # load libraries

@@ -1,6 +1,7 @@
-# Simulation: Sim01_NoTech_29May2014
-# Description: 1000 year simulation, no green tech progress
-# last modified: by Dwayne June 3, 2014
+# Purpose: This script performs the simulation and produces the results
+# shown in Figures 12 and 13 in the book Human Enterprise, Ecosystems, 
+# and the Future of Civilization. In this simulation, there is no 
+# progress in "green technology". The simulation runs for 1,000 years.
 
 ###################################################################################
 # load libraries
@@ -39,7 +40,6 @@ Human_Activity_W_t0 <- # human activity, W
   1 / (365 * 24 * 60 * 60) # 1 yr / (365 d/yr * 24 hr/d * 60 min/hr * 60 s/min
 
 Kardashev_Scale_t0 <- (log(Human_Activity_W_t0, 10) - 6) / 10
-
 
 ###################################################################################
 
@@ -103,17 +103,6 @@ Output <- c(year,
             Depletion_of_Natural_Capital_t0,
             Natural_Capital_Gap_t0,
             Decrease_in_Human_Activity_t0)
-
-# names(Output) <- c("Year", 
-#                        "Human_Activity", 
-#                        "Kardashev_Scale",
-#                        "Natural_Capital",
-#                        "Natural_Capital_NCU",
-#                        "Replenishment_of_Natural_Capital",
-#                        "Unit_Depletion_of_Natural_Capital",
-#                        "Depletion_of_Natural_Capital",
-#                        "Natural_Capital_Gap",
-#                        "Decrease_in_Human_Activity")
 
 Human_Activity <- Human_Activity_t0
 Natural_Capital <- Natural_Capital_t0
@@ -193,39 +182,16 @@ while (year < ending_year) {
 
   Output <- rbind(Output, new_output)
 
-}
-###################################################################################
+} # end of simulation loop
 
 #Output # uncomment to print output data set if desired
-
-# plot outputs of interest
-
-# plot human activity stock
-#plot(
-#  Output[,3]~Output[,1],
-#  type="l",
-#  xlab="Year",
-#  ylab="Human Activity (W)",
-#  log="x"
-#  )
-
-# plot natural capital stock
-#plot(
-#  Output[,1], Output[,5],
-#  log="x",
-#  type="l",
-#  xlab="Year",
-#  ylab="Natural Capital (kg C)"
-#  )
-
-###################################################################################
 
 # plot outputs in ggplot2
 
 # convert from a matrix to a data frame (required for ggplot)
 Output_df <- as.data.frame(Output)
 
-# PLOT HUMAN ACTIVITY (FIGURE 13)
+# PLOT HUMAN ACTIVITY
 # assign data to be plotted
 Human_Activity_Plot_1 <- ggplot(
   data = Output_df, # data set

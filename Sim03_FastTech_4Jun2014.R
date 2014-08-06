@@ -1,6 +1,7 @@
-# Simulation: Sim03_FastTech_4Jun2014
-# Description: green tech progress faster than overall growth
-# last modified: by Dwayne June 4, 2014
+# Purpose: This script performs the simulation and produces the results
+# shown in Figure 18 in the book Human Enterprise, Ecosystems, 
+# and the Future of Civilization. In this simulation, there is "fast" 
+# progress in "green technology". The simulation runs for 1,000 years.
 
 ###################################################################################
 # load libraries
@@ -196,26 +197,6 @@ while (year < ending_year) {
 ###################################################################################
 
 #Output # uncomment to print output data set if desired
-
-# plot outputs of interest
-
-# # plot human activity stock
-# plot(
-#   Output[,3]~Output[,1],
-#   type="l",
-#   xlab="Year",
-#   ylab="Human Activity (Kardashev Scale)",
-#   log="x"
-#   )
-# 
-# # plot natural capital stock
-# plot(
-#   Output[,1], Output[,5],
-#   log="x",
-#   type="l",
-#   xlab="Year",
-#   ylab="Natural Capital (arbitrary units, 2013=100)"
-#   )
 
 # plot outputs in ggplot2
 

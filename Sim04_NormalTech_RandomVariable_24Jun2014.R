@@ -1,7 +1,10 @@
-# Simulation: Sim04_NormalTech_1000Yr_5Jun2014
-# Description: 1,000 year simulation, historical rate of green tech progress
-#               random variable added to simulate disasters and accidents
-# last modified: by Dwayne June 26, 2014
+# Purpose: This script performs the simulation and produces the results
+# shown in Figure 21 in the book Human Enterprise, Ecosystems, 
+# and the Future of Civilization. In this simulation, there is "typical" 
+# progress in "green technology". Random "disasters" are thrown in.
+# The simulation runs for 1,000 years. 10 repetitions are performed. 
+# Results will be different every time because no seed has been set 
+# for the random number generator.
 
 ###################################################################################
 # load libraries

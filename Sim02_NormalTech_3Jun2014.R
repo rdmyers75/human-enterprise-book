@@ -1,10 +1,7 @@
 # Purpose: This script performs the simulation and produces the results
-# shown in Figure 20 in the book Human Enterprise, Ecosystems, 
-# and the Future of Civilization. In this simulation, there is "fast" 
-# progress in "green technology". The simulation runs for 10,000 years
-# but the loop exits when it exceeds the "Kardashev Level III" 
-# civilization, after which the exponential trend is practically 
-# vertical.
+# shown in Figures 16 and 17 in the book Human Enterprise, Ecosystems, 
+# and the Future of Civilization. In this simulation, there is "typical" 
+# progress in "green technology". The simulation runs for 1,000 years.
 
 ###################################################################################
 # load libraries
@@ -16,15 +13,14 @@ library("scales")
 
 # run controls
 starting_year <- 1
-ending_year <- 10000
+ending_year <- 1000
 
 # constants
 Rate_of_Increase_in_Human_Activity <- 0.02475 # /yr
 Primary_Productivity <- 5.36e13 # kg C/yr
 Replenishment_of_Natural_Capital <- Primary_Productivity
 Unit_Depletion_of_Natural_Capital_t0 <- 5.5079e-08 # kg C / J/yr human activity
-# Rate_of_Decrease_in_Unit_Depletion_of_Natural_Capital <- 0.0025 # /yr
-Rate_of_Decrease_in_Unit_Depletion_of_Natural_Capital <- 0.03 # /yr
+Rate_of_Decrease_in_Unit_Depletion_of_Natural_Capital <- 0.0025 # /yr
 Effect_of_Natural_Capital_Depletion_on_Human_Activity <- 1.65e-16 # / kg C
 Decrease_in_Human_Activity_t0 <- 0
 Natural_Capital_Gap_t0 <- 0
@@ -95,7 +91,7 @@ Depletion_of_Natural_Capital_t0 <-
   Unit_Depletion_of_Natural_Capital_t0 * Human_Activity_t0
 
 Output <- c(year, 
-            Human_Activity_t0, 
+            Human_Activity_t0,
             Human_Activity_W_t0,
             Kardashev_Scale_t0,
             Natural_Capital_t0,
@@ -166,12 +162,17 @@ while (year < ending_year) {
     1 * # 1 W / J/s
     1 / (365 * 24 * 60 * 60) # 1 yr / (365 d/yr * 24 hr/d * 60 min/hr * 60 s/min
   
+  # calculate human activity in W and the Kardashev Scale
+  Human_Activity_W <- # human activity, W
+    Human_Activity * # human activity, J/yr
+    1 * # 1 W / J/s
+    1 / (365 * 24 * 60 * 60) # 1 yr / (365 d/yr * 24 hr/d * 60 min/hr * 60 s/min
+
   Kardashev_Scale <- (log(Human_Activity_W, 10) - 6) / 10
-  if (Kardashev_Scale >= 3.0) break
   
   # add newest values to output data set
   new_output <- c(year, 
-                  Human_Activity,
+                  Human_Activity, 
                   Human_Activity_W,
                   Kardashev_Scale,
                   Natural_Capital,
@@ -201,8 +202,8 @@ while (year < ending_year) {
 
 #Output # uncomment to print output data set if desired
 
-# plot outputs of interest
-
+# # plot outputs of interest
+# 
 # # plot human activity stock
 # plot(
 #   Output[,3]~Output[,1],
@@ -220,6 +221,8 @@ while (year < ending_year) {
 #   xlab="Year",
 #   ylab="Natural Capital (arbitrary units, 2013=100)"
 #   )
+
+###################################################################################
 
 # plot outputs in ggplot2
 
@@ -259,18 +262,16 @@ Human_Activity_Plot_6 <- Human_Activity_Plot_3 +
 Human_Activity_Plot_7 <- Human_Activity_Plot_6 +
   scale_x_continuous(
     name = "Years", # x axis label
-    limits = c(1, 10000), # set x axis limits
-    breaks = c(5, 10, 50, 100, 500, 1000, 10000), # x axis limits and interval
+    limits = c(1, 1000), # set x axis limits
+    breaks = c(5, 10, 50, 100, 500, 1000), # x axis limits and interval
     minor_breaks = function(x) log10(x)/10, # specify minor breaks (NOT DEBUGGED)
     expand = c(0.01,0) # control where y axis crosses - first number is fraction of plot left as white space
     #     labels = c("Years", "", "Decades", "", "Centuries", "") # replace x-axis numbers with text labels
   ) +
   scale_y_continuous(
     name = ("Human Activity (W)"), # y axis label
-    limits = c(1e13, 1e36), # set y axis limits
-    breaks = c(1e13, 1e15, 1e17, 1e19, 1e21, 
-               1e23, 1e25, 1e27, 1e29, 1e31,
-               1e33, 1e35), # set breaks and tick marks
+    limits = c(1e13, 5e14), # set y axis limits
+    breaks = c(1e13, 1e14, 2e14, 3e14, 4e14, 5e14), # set breaks and tick marks
     expand = c(0.02,0) # control where x axis crosses - first number is fraction left as white space
   )
 
